@@ -70,32 +70,6 @@
                             <button id="resetBtn" class="btn btn-secondary">Reset to Default</button>
                             <button id="animateBtn" class="btn btn-primary">Animate Movement</button>
                         </div>
-
-                        <hr style="margin: 1.5rem 0; border-color: #ddd;">
-
-                        <h3>Inverse Kinematics (IK)</h3>
-                        <p class="control-description">Set target position → Calculate joint angles</p>
-                        
-                        <div class="control-group">
-                            <label for="targetX">Target X: <span id="targetXValue">200</span> px</label>
-                            <input type="range" id="targetX" min="-300" max="300" value="200" step="5">
-                        </div>
-
-                        <div class="control-group">
-                            <label for="targetY">Target Y: <span id="targetYValue">150</span> px</label>
-                            <input type="range" id="targetY" min="-300" max="300" value="150" step="5">
-                        </div>
-
-                        <div class="control-buttons">
-                            <button id="solveIKBtn" class="btn btn-primary">Solve Inverse Kinematics</button>
-                        </div>
-
-                        <div id="ikResult" class="ik-result" style="display: none;">
-                            <h4>IK Solution:</h4>
-                            <p>θ₁ = <span id="ikTheta1">0</span>°</p>
-                            <p>θ₂ = <span id="ikTheta2">0</span>°</p>
-                            <p id="ikStatus" class="ik-status"></p>
-                        </div>
                     </div>
                 </div>
 
@@ -119,32 +93,12 @@
                         <p class="verify-note">✅ Set θ₁=45°, θ₂=30° in the simulator to verify!</p>
                     </div>
 
-                    <h2>Inverse Kinematics (IK) - Theory & Verification</h2>
-                    <p>Inverse kinematics calculates joint angles from a target position using the law of cosines:</p>
-                    
-                    <div class="math-box">
-                        <p><strong>cos(θ₂) = (x² + y² - L₁² - L₂²) / (2×L₁×L₂)</strong></p>
-                        <p><strong>θ₂ = atan2(±√(1-cos²θ₂), cosθ₂)</strong></p>
-                        <p><strong>θ₁ = atan2(y, x) - atan2(L₂sin(θ₂), L₁ + L₂cos(θ₂))</strong></p>
-                    </div>
-
-                    <h3>📐 IK Verification Example</h3>
-                    <div class="verification-box">
-                        <p><strong>Given:</strong> Target (x=200, y=150), L₁=150px, L₂=120px</p>
-                        <p><strong>Step 1:</strong> Check if reachable: √(200² + 150²) = 250 ≤ L₁+L₂ = 270 ✓</p>
-                        <p><strong>Step 2:</strong> Calculate cos(θ₂):</p>
-                        <p>cos(θ₂) = (200² + 150² - 150² - 120²) / (2×150×120) = (62500 - 36900) / 36000 = 0.711</p>
-                        <p><strong>Step 3:</strong> θ₂ = acos(0.711) = <strong>44.7°</strong></p>
-                        <p><strong>Step 4:</strong> Calculate θ₁ = atan2(150, 200) - atan2(84.6, 235.7) = 36.87° - 19.75° = <strong>17.1°</strong></p>
-                        <p class="verify-note">✅ Set Target X=200, Y=150 and click "Solve IK" to verify!</p>
-                    </div>
-
                     <h3>🎯 Try These Challenges:</h3>
                     <ul class="challenges">
-                        <li>🎯 Use IK to position the end-effector at coordinates (200, 150)</li>
-                        <li>🔄 Compare the IK solution with your manual slider adjustments</li>
-                        <li>📐 Try reaching a point outside the workspace (e.g., X=400, Y=400) - what happens?</li>
-                        <li>🔍 Notice how different configurations (elbow up/down) can reach the same point</li>
+                        <li>🎯 Can you position the end-effector at coordinates (200, 150)?</li>
+                        <li>🔄 Try creating a circular motion by adjusting both angles smoothly</li>
+                        <li>📐 Observe how changing link lengths affects the reachable workspace</li>
+                        <li>🔍 Notice how different angle combinations can result in the same end-effector position</li>
                     </ul>
                 </div>
 

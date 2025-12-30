@@ -1,5 +1,5 @@
 // Forward Kinematics Simulator
-// 2-link planar robot arm visualization with Inverse Kinematics
+// 2-link planar robot arm visualization
 
 const canvas = document.getElementById('robotCanvas');
 const ctx = canvas.getContext('2d');
@@ -12,11 +12,6 @@ const link2Slider = document.getElementById('link2');
 const resetBtn = document.getElementById('resetBtn');
 const animateBtn = document.getElementById('animateBtn');
 
-// IK control elements
-const targetXSlider = document.getElementById('targetX')
-const targetYSlider = document.getElementById('targetY');
-const solveIKBtn = document.getElementById('solveIKBtn');
-
 // Display elements
 const theta1Value = document.getElementById('theta1Value');
 const theta2Value = document.getElementById('theta2Value');
@@ -25,24 +20,11 @@ const link2Value = document.getElementById('link2Value');
 const endX = document.getElementById('endX');
 const endY = document.getElementById('endY');
 
-// IK display elements
-const targetXValue = document.getElementById('targetXValue');
-const targetYValue = document.getElementById('targetYValue');
-const ikResult = document.getElementById('ikResult');
-const ikTheta1 = document.getElementById('ikTheta1');
-const ikTheta2 = document.getElementById('ikTheta2');
-const ikStatus = document.getElementById('ikStatus');
-
 // Robot parameters
 let theta1 = 0; // Joint 1 angle in degrees
 let theta2 = 0; // Joint 2 angle in degrees
 let link1Length = 150; // Link 1 length in pixels
 let link2Length = 120; // Link 2 length in pixels
-
-// Target position for IK
-let targetX = 200;
-let targetY = 150;
-let showTarget = false;
 
 // Animation state
 let isAnimating = false;
@@ -82,24 +64,8 @@ function init() {
         drawRobot();
     });
     
-    // IK event listeners
-    targetXSlider.addEventListener('input', () => {
-        targetX = parseFloat(targetXSlider.value);
-        targetXValue.textContent = targetX;
-        showTarget = true;
-        drawRobot();
-    });
-    
-    targetYSlider.addEventListener('input', () => {
-        targetY = parseFloat(targetYSlider.value);
-        targetYValue.textContent = targetY;
-        showTarget = true;
-        drawRobot();
-    });
-    
     resetBtn.addEventListener('click', resetRobot);
     animateBtn.addEventListener('click', toggleAnimation);
-    solveIKBtn.addEventListener('click', solveInverseKinematics);
 }
 
 // Update display values
@@ -109,69 +75,18 @@ function updateDisplay() {
     link1Value.textContent = link1Length;
     link2Value.textContent = link2Length;
     
-    // Calculate end-effector position
+    // Calculate end-effector position (Forward Kinematics)
     const theta1Rad = theta1 * Math.PI / 180;
     const theta2Rad = theta2 * Math.PI / 180;
     
+    // X position = L1*cos(θ1) + L2*cos(θ1+θ2)
     const x = link1Length * Math.cos(theta1Rad) + link2Length * Math.cos(theta1Rad + theta2Rad);
+    
+    // Y position = L1*sin(θ1) + L2*sin(θ1+θ2)
     const y = link1Length * Math.sin(theta1Rad) + link2Length * Math.sin(theta1Rad + theta2Rad);
     
     endX.textContent = x.toFixed(2);
     endY.textContent = y.toFixed(2);
-}
-
-// Solve Inverse Kinematics
-function solveInverseKinematics() {
-    showTarget = true;
-    const x = targetX;
-    const y = targetY;
-    const L1 = link1Length;
-    const L2 = link2Length;
-    
-    // Calculate distance to target
-    const distance = Math.sqrt(x * x + y * y);
-    const maxReach = L1 + L2;
-    const minReach = Math.abs(L1 - L2);
-    
-    // Check if target is reachable
-    if (distance > maxReach || distance < minReach) {
-        ikResult.style.display = 'block';
-        ikTheta1.textContent = '--';
-        ikTheta2.textContent = '--';
-        ikStatus.textContent = '❌ Target unreachable! Distance: ' + distance.toFixed(2) + 'px, Max reach: ' + maxReach + 'px';
-        ikStatus.style.color = '#dc3545';
-        drawRobot();
-        return;
-    }
-    
-    // Calculate theta2 using law of cosines
-    const cosTheta2 = (x * x + y * y - L1 * L1 - L2 * L2) / (2 * L1 * L2);
-    const theta2Rad = Math.acos(Math.max(-1, Math.min(1, cosTheta2))); // Elbow down configuration
-    
-    // Calculate theta1
-    const k1 = L1 + L2 * cosTheta2;
-    const k2 = L2 * Math.sin(theta2Rad);
-    const theta1Rad = Math.atan2(y, x) - Math.atan2(k2, k1);
-    
-    // Convert to degrees
-    const newTheta1 = theta1Rad * 180 / Math.PI;
-    const newTheta2 = theta2Rad * 180 / Math.PI;
-    
-    // Update sliders and values
-    theta1 = newTheta1;
-    theta2 = newTheta2;
-    theta1Slider.value = theta1;
-    theta2Slider.value = theta2;
-    
-    // Display IK results
-    ikResult.style.display = 'block';
-    ikTheta1.textContent = newTheta1.toFixed(2);
-    ikTheta2.textContent = newTheta2.toFixed(2);
-    ikStatus.textContent = '✅ Solution found! (Elbow-down configuration)';
-    ikStatus.style.color = '#28a745';
-    
-    updateDisplay();
-    drawRobot();
 }
 
 // Draw the robot arm
@@ -185,16 +100,11 @@ function drawRobot() {
     // Draw workspace circle (reachable area)
     drawWorkspace();
     
-    // Draw target point if IK is being used
-    if (showTarget) {
-        drawTarget();
-    }
-    
     // Convert angles to radians
     const theta1Rad = theta1 * Math.PI / 180;
     const theta2Rad = theta2 * Math.PI / 180;
     
-    // Calculate joint positions
+    // Calculate joint positions using Forward Kinematics
     const joint1X = baseX + link1Length * Math.cos(theta1Rad);
     const joint1Y = baseY - link1Length * Math.sin(theta1Rad); // Invert Y for screen coordinates
     
@@ -285,36 +195,6 @@ function drawWorkspace() {
     ctx.setLineDash([]);
 }
 
-// Draw target point
-function drawTarget() {
-    const targetScreenX = baseX + targetX;
-    const targetScreenY = baseY - targetY; // Invert Y for screen coordinates
-    
-    // Draw target crosshair
-    ctx.strokeStyle = '#28a745';
-    ctx.lineWidth = 2;
-    
-    ctx.beginPath();
-    ctx.moveTo(targetScreenX - 15, targetScreenY);
-    ctx.lineTo(targetScreenX + 15, targetScreenY);
-    ctx.stroke();
-    
-    ctx.beginPath();
-    ctx.moveTo(targetScreenX, targetScreenY - 15);
-    ctx.lineTo(targetScreenX, targetScreenY + 15);
-    ctx.stroke();
-    
-    // Draw target circle
-    ctx.beginPath();
-    ctx.arc(targetScreenX, targetScreenY, 8, 0, 2 * Math.PI);
-    ctx.stroke();
-    
-    // Draw label
-    ctx.fillStyle = '#28a745';
-    ctx.font = 'bold 12px Arial';
-    ctx.fillText('Target (' + targetX + ', ' + targetY + ')', targetScreenX + 15, targetScreenY - 10);
-}
-
 // Draw grid
 function drawGrid() {
     ctx.strokeStyle = '#e0e0e0';
@@ -369,14 +249,11 @@ function resetRobot() {
     theta2 = 0;
     link1Length = 150;
     link2Length = 120;
-    showTarget = false;
     
     theta1Slider.value = theta1;
     theta2Slider.value = theta2;
     link1Slider.value = link1Length;
     link2Slider.value = link2Length;
-    
-    ikResult.style.display = 'none';
     
     updateDisplay();
     drawRobot();
