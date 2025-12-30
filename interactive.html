@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Demo - RobotRider</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo-container">
+                <img src="assets/images/upm logo.png" alt="UPM Logo" class="upm-logo">
+                <div class="logo">🤖 RobotRider</div>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="video1.html">Junior School</a></li>
+                <li><a href="video2.html">High School</a></li>
+                <li><a href="video3.html">Undergraduate</a></li>
+                <li><a href="interactive.html" class="active">Interactive Demo</a></li>
+                <li><a href="reflection.html">Reflection</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="interactive-page">
+            <div class="container">
+                <h1>Interactive Forward Kinematics Simulator</h1>
+                <p class="subtitle">Adjust the joint angles using the sliders below and watch how the robot arm moves in real-time!</p>
+
+                <div class="simulator-container">
+                    <div class="canvas-wrapper">
+                        <canvas id="robotCanvas" width="800" height="600"></canvas>
+                        <div class="canvas-overlay">
+                            <div class="info-panel">
+                                <h3>End-Effector Position</h3>
+                                <p>X: <span id="endX">0.00</span></p>
+                                <p>Y: <span id="endY">0.00</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="controls-panel">
+                        <h3>Forward Kinematics (FK)</h3>
+                        <p class="control-description">Set joint angles → Calculate end position</p>
+                        
+                        <div class="control-group">
+                            <label for="theta1">Joint 1 Angle (θ₁): <span id="theta1Value">0</span>°</label>
+                            <input type="range" id="theta1" min="-180" max="180" value="0" step="1">
+                        </div>
+
+                        <div class="control-group">
+                            <label for="link1">Link 1 Length: <span id="link1Value">150</span> px</label>
+                            <input type="range" id="link1" min="50" max="250" value="150" step="5">
+                        </div>
+
+                        <div class="control-group">
+                            <label for="theta2">Joint 2 Angle (θ₂): <span id="theta2Value">0</span>°</label>
+                            <input type="range" id="theta2" min="-180" max="180" value="0" step="1">
+                        </div>
+
+                        <div class="control-group">
+                            <label for="link2">Link 2 Length: <span id="link2Value">120</span> px</label>
+                            <input type="range" id="link2" min="50" max="200" value="120" step="5">
+                        </div>
+
+                        <div class="control-buttons">
+                            <button id="resetBtn" class="btn btn-secondary">Reset to Default</button>
+                            <button id="animateBtn" class="btn btn-primary">Animate Movement</button>
+                        </div>
+
+                        <hr style="margin: 1.5rem 0; border-color: #ddd;">
+
+                        <h3>Inverse Kinematics (IK)</h3>
+                        <p class="control-description">Set target position → Calculate joint angles</p>
+                        
+                        <div class="control-group">
+                            <label for="targetX">Target X: <span id="targetXValue">200</span> px</label>
+                            <input type="range" id="targetX" min="-300" max="300" value="200" step="5">
+                        </div>
+
+                        <div class="control-group">
+                            <label for="targetY">Target Y: <span id="targetYValue">150</span> px</label>
+                            <input type="range" id="targetY" min="-300" max="300" value="150" step="5">
+                        </div>
+
+                        <div class="control-buttons">
+                            <button id="solveIKBtn" class="btn btn-primary">Solve Inverse Kinematics</button>
+                        </div>
+
+                        <div id="ikResult" class="ik-result" style="display: none;">
+                            <h4>IK Solution:</h4>
+                            <p>θ₁ = <span id="ikTheta1">0</span>°</p>
+                            <p>θ₂ = <span id="ikTheta2">0</span>°</p>
+                            <p id="ikStatus" class="ik-status"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="explanation-section">
+                    <h2>Forward Kinematics (FK) - Theory & Verification</h2>
+                    <p>Forward kinematics calculates the end-effector position from joint angles:</p>
+                    
+                    <div class="math-box">
+                        <p><strong>x = L₁cos(θ₁) + L₂cos(θ₁ + θ₂)</strong></p>
+                        <p><strong>y = L₁sin(θ₁) + L₂sin(θ₁ + θ₂)</strong></p>
+                    </div>
+
+                    <h3>📐 FK Verification Example</h3>
+                    <div class="verification-box">
+                        <p><strong>Given:</strong> L₁ = 150px, L₂ = 120px, θ₁ = 45°, θ₂ = 30°</p>
+                        <p><strong>Step 1:</strong> Convert to radians: θ₁ = 0.785 rad, θ₂ = 0.524 rad</p>
+                        <p><strong>Step 2:</strong> Calculate x:</p>
+                        <p>x = 150×cos(45°) + 120×cos(45°+30°) = 150×0.707 + 120×0.259 = 106.07 + 31.06 = <strong>137.13 px</strong></p>
+                        <p><strong>Step 3:</strong> Calculate y:</p>
+                        <p>y = 150×sin(45°) + 120×sin(45°+30°) = 150×0.707 + 120×0.966 = 106.07 + 115.91 = <strong>221.98 px</strong></p>
+                        <p class="verify-note">✅ Set θ₁=45°, θ₂=30° in the simulator to verify!</p>
+                    </div>
+
+                    <h2>Inverse Kinematics (IK) - Theory & Verification</h2>
+                    <p>Inverse kinematics calculates joint angles from a target position using the law of cosines:</p>
+                    
+                    <div class="math-box">
+                        <p><strong>cos(θ₂) = (x² + y² - L₁² - L₂²) / (2×L₁×L₂)</strong></p>
+                        <p><strong>θ₂ = atan2(±√(1-cos²θ₂), cosθ₂)</strong></p>
+                        <p><strong>θ₁ = atan2(y, x) - atan2(L₂sin(θ₂), L₁ + L₂cos(θ₂))</strong></p>
+                    </div>
+
+                    <h3>📐 IK Verification Example</h3>
+                    <div class="verification-box">
+                        <p><strong>Given:</strong> Target (x=200, y=150), L₁=150px, L₂=120px</p>
+                        <p><strong>Step 1:</strong> Check if reachable: √(200² + 150²) = 250 ≤ L₁+L₂ = 270 ✓</p>
+                        <p><strong>Step 2:</strong> Calculate cos(θ₂):</p>
+                        <p>cos(θ₂) = (200² + 150² - 150² - 120²) / (2×150×120) = (62500 - 36900) / 36000 = 0.711</p>
+                        <p><strong>Step 3:</strong> θ₂ = acos(0.711) = <strong>44.7°</strong></p>
+                        <p><strong>Step 4:</strong> Calculate θ₁ = atan2(150, 200) - atan2(84.6, 235.7) = 36.87° - 19.75° = <strong>17.1°</strong></p>
+                        <p class="verify-note">✅ Set Target X=200, Y=150 and click "Solve IK" to verify!</p>
+                    </div>
+
+                    <h3>🎯 Try These Challenges:</h3>
+                    <ul class="challenges">
+                        <li>🎯 Use IK to position the end-effector at coordinates (200, 150)</li>
+                        <li>🔄 Compare the IK solution with your manual slider adjustments</li>
+                        <li>📐 Try reaching a point outside the workspace (e.g., X=400, Y=400) - what happens?</li>
+                        <li>🔍 Notice how different configurations (elbow up/down) can reach the same point</li>
+                    </ul>
+                </div>
+
+                <div class="navigation-links">
+                    <a href="video3.html" class="btn btn-secondary">← Back to Undergraduate Video</a>
+                    <a href="index.html" class="btn btn-primary">Return to Home</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 RobotRider Group. Educational Project on Forward Kinematics.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

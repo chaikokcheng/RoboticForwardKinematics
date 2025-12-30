@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High School Video - RobotRider</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo-container">
+                <img src="assets/images/upm logo.png" alt="UPM Logo" class="upm-logo">
+                <div class="logo">🤖 RobotRider</div>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="video1.html">Junior School</a></li>
+                <li><a href="video2.html" class="active">High School</a></li>
+                <li><a href="video3.html">Undergraduate</a></li>
+                <li><a href="interactive.html">Interactive Demo</a></li>
+                <li><a href="reflection.html">Reflection</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="video-page">
+            <div class="container">
+                <div class="video-header">
+                    <span class="video-badge highschool">High School</span>
+                    <h1>Angles, Link Lengths, and Joint Rotation</h1>
+                    <p class="video-description">Learn how joint angles and link lengths determine the position of the robot's end-effector using geometry and trigonometry.</p>
+                </div>
+
+                <div class="video-container">
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="https://drive.google.com/file/d/15aA8OSpEKR02W4enwQLYrrvrRXojFEl6/preview" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h2>What You'll Learn</h2>
+                    <ul class="learning-points">
+                        <li>📐 Understand what Forward Kinematics is and how it calculates hand position from joint angles</li>
+                        <li>📏 Learn about a two-link robot arm: L₁, L₂ (link lengths) and θ₁, θ₂ (joint angles)</li>
+                        <li>🔺 Use cosine for horizontal (X-axis) movement and sine for vertical (Y-axis) movement</li>
+                        <li>📊 See how changing θ₁ rotates the entire arm, while θ₂ only rotates the second link</li>
+                        <li>🎯 Understand that even small angle changes can cause large hand movement</li>
+                    </ul>
+
+                    <h2>Key Concepts</h2>
+                    <div class="concept-cards">
+                        <div class="concept-card">
+                            <h3>Forward Kinematics</h3>
+                            <p>The process of calculating the position of a robot's hand (end-effector) when we already know the joint angles. We give joint movement as input, and FK tells us where the hand ends up.</p>
+                        </div>
+                        <div class="concept-card">
+                            <h3>Two-Link Robot Arm</h3>
+                            <p>L₁ is the first link (attached to base), L₂ is the second link (attached to end of first link). θ₁ is the first joint angle, θ₂ is the second joint angle.</p>
+                        </div>
+                        <div class="concept-card">
+                            <h3>Trigonometry in FK</h3>
+                            <p>Cosine helps find movement along the X-axis (horizontal), Sine helps find movement along the Y-axis (vertical). By adding contributions from both links, we calculate exact position.</p>
+                        </div>
+                        <div class="concept-card">
+                            <h3>Curved Path Motion</h3>
+                            <p>The robot hand doesn't move in a straight line - it follows a curved path because both joint angles combine together to determine the final position.</p>
+                        </div>
+                    </div>
+
+                    <h2>Mathematical Foundation</h2>
+                    <div class="math-box">
+                        <p>For a simple 2-link arm:</p>
+                        <p><strong>x = L₁cos(θ₁) + L₂cos(θ₁ + θ₂)</strong></p>
+                        <p><strong>y = L₁sin(θ₁) + L₂sin(θ₁ + θ₂)</strong></p>
+                        <p>The second link's angle is (θ₁ + θ₂) because it rotates on top of the first link. By adding these values, we find the exact position of the robot hand.</p>
+                    </div>
+
+                    <h2>Real-World Applications</h2>
+                    <ul>
+                        <li>🤖 <strong>Robot Arms:</strong> Helps robots know exactly where their hand is to pick up and place objects accurately</li>
+                        <li>🏭 <strong>Factories:</strong> Allows machines to perform repetitive tasks like packaging and assembly safely and efficiently</li>
+                        <li>🎮 <strong>Games & Animations:</strong> Calculates how character arms and legs move, making movement look smooth and realistic</li>
+                    </ul>
+
+                    <h2>Activities Shown in This Video</h2>
+                    <ul>
+                        <li>Two-link robot arm diagram showing L₁, L₂, θ₁, and θ₂</li>
+                        <li>Step-by-step breakdown of X and Y position calculations</li>
+                        <li>Animation showing how θ₁ change rotates entire arm in circular path</li>
+                        <li>Animation showing how θ₂ change moves only the second link</li>
+                        <li>Quiz: "What does Forward Kinematics calculate?" (Answer: Hand position)</li>
+                    </ul>
+
+                    <div class="navigation-links">
+                        <a href="video1.html" class="btn btn-secondary">← Previous: Junior School</a>
+                        <a href="video3.html" class="btn btn-primary">Next: Undergraduate Level →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 RobotRider Group. Educational Project on Forward Kinematics.</p>
+        </div>
+    </footer>
+</body>
+</html>
+

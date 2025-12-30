@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undergraduate Video - RobotRider</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo-container">
+                <img src="assets/images/upm logo.png" alt="UPM Logo" class="upm-logo">
+                <div class="logo">🤖 RobotRider</div>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="video1.html">Junior School</a></li>
+                <li><a href="video2.html">High School</a></li>
+                <li><a href="video3.html" class="active">Undergraduate</a></li>
+                <li><a href="interactive.html">Interactive Demo</a></li>
+                <li><a href="reflection.html">Reflection</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="video-page">
+            <div class="container">
+                <div class="video-header">
+                    <span class="video-badge undergraduate">Undergraduate</span>
+                    <h1>Forward Kinematics Using Transformation Matrices</h1>
+                    <p class="video-description">A rigorous mathematical treatment of forward kinematics using homogeneous transformation matrices and matrix composition.</p>
+                </div>
+
+                <div class="video-container">
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="https://drive.google.com/file/d/1IPy3RM8L6UE1Noab61P5GF48U9AXsapZ/preview" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h2>What You'll Learn</h2>
+                    <ul class="learning-points">
+                        <li>🔢 Derive forward kinematics using homogeneous transformation matrices</li>
+                        <li>🔄 Understand coordinate frames: Frame A (base), Frame B (first link), Frame P (end-effector)</li>
+                        <li>📐 Multiply rotation matrices with translation vectors to get transformation matrices</li>
+                        <li>🧮 Compose multiple transformations: T_A→P = T_A→B × T_B→P</li>
+                        <li>💻 Verify results using forward kinematics simulation software</li>
+                    </ul>
+
+                    <h2>Key Concepts</h2>
+                    <div class="concept-cards">
+                        <div class="concept-card">
+                            <h3>Coordinate Frames</h3>
+                            <p>Frame A is at the base, Frame B moves with the first link L₁, and Frame P is at the end-effector moving with the second link L₂. Our goal is to find Frame P's position relative to Frame A.</p>
+                        </div>
+                        <div class="concept-card">
+                            <h3>Homogeneous Transformation</h3>
+                            <p>Combines rotation and translation into a single matrix. Multiply the rotation matrix with the translation vector to get the full transformation.</p>
+                        </div>
+                        <div class="concept-card">
+                            <h3>Matrix Composition</h3>
+                            <p>To find T_A→P, multiply T_A→B × T_B→P. First multiply the rotation matrices, then calculate the final translation components.</p>
+                        </div>
+                        <div class="concept-card">
+                            <h3>Rotation Matrix</h3>
+                            <p>For angle θ: R = [cos(θ), -sin(θ); sin(θ), cos(θ)]. When composing rotations, use trigonometric identities to simplify to cos(θ₁+θ₂) and sin(θ₁+θ₂).</p>
+                        </div>
+                    </div>
+
+                    <h2>Mathematical Foundation</h2>
+                    <div class="math-box">
+                        <p><strong>Transformation A→B (first link):</strong></p>
+                        <p>Rotation: [cos(θ₁), -sin(θ₁); sin(θ₁), cos(θ₁)]</p>
+                        <p>Translation: x = L₁cos(θ₁), y = L₁sin(θ₁)</p>
+                        <br>
+                        <p><strong>Transformation B→P (second link):</strong></p>
+                        <p>Rotation: [cos(θ₂), -sin(θ₂); sin(θ₂), cos(θ₂)]</p>
+                        <p>Translation: x = L₂cos(θ₂), y = L₂sin(θ₂)</p>
+                        <br>
+                        <p><strong>Final Result (T_A→P = T_A→B × T_B→P):</strong></p>
+                        <p>x = L₁cos(θ₁) + L₂cos(θ₁ + θ₂)</p>
+                        <p>y = L₁sin(θ₁) + L₂sin(θ₁ + θ₂)</p>
+                    </div>
+
+                    <h2>Worked Example</h2>
+                    <div class="math-box">
+                        <p><strong>Given:</strong> L₁ = 1, L₂ = 2, θ₁ = 60°, θ₂ = 30°</p>
+                        <p><strong>Result:</strong> End-effector position: x = 0.5, y = 2.87</p>
+                        <p>This was verified using the simulation program showing frames 0, 1, 2 and their transformations.</p>
+                    </div>
+
+                    <h2>Activities Shown in This Video</h2>
+                    <ul>
+                        <li>Step-by-step derivation of transformation matrix from A→B and B→P</li>
+                        <li>Matrix multiplication of rotation and translation components</li>
+                        <li>Simplification using trigonometric identities (cos(θ₁+θ₂), sin(θ₁+θ₂))</li>
+                        <li>Numerical worked example with L₁=1, L₂=2, θ₁=60°, θ₂=30°</li>
+                        <li>Simulation program demonstration showing frame transformations</li>
+                        <li>Interactive challenge: "What if θ₂ = -30°? Comment the answer!"</li>
+                    </ul>
+
+                    <div class="navigation-links">
+                        <a href="video2.html" class="btn btn-secondary">← Previous: High School</a>
+                        <a href="interactive.html" class="btn btn-primary">Try Interactive Demo →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 RobotRider Group. Educational Project on Forward Kinematics.</p>
+        </div>
+    </footer>
+</body>
+</html>
+

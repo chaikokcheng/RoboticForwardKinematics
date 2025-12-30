@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Junior School Video - RobotRider</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo-container">
+                <img src="assets/images/upm logo.png" alt="UPM Logo" class="upm-logo">
+                <div class="logo">🤖 RobotRider</div>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="video1.html" class="active">Junior School</a></li>
+                <li><a href="video2.html">High School</a></li>
+                <li><a href="video3.html">Undergraduate</a></li>
+                <li><a href="interactive.html">Interactive Demo</a></li>
+                <li><a href="reflection.html">Reflection</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="video-page">
+            <div class="container">
+                <div class="video-header">
+                    <span class="video-badge junior">Junior School</span>
+                    <h1>How Does a Robot Arm Move Its Hand to Reach Something?</h1>
+                    <p class="video-description">A simple introduction to robot arm movement using everyday analogies and demonstrations.</p>
+                </div>
+
+                <div class="video-container">
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="https://drive.google.com/file/d/1nXY1qsaSyRqAyCxWs0s2H-K9Z68MdSel/preview" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h2>What You'll Learn</h2>
+                    <ul class="learning-points">
+                        <li>🤖 Understand what a robot arm (manipulator) is and its parts: base, links, joints, and gripper</li>
+                        <li>🦴 See how robot arms are inspired by human arms - comparing shoulder, elbow, and wrist to robot joints</li>
+                        <li>🔄 Learn how joint rotation affects the entire arm movement from base to gripper</li>
+                        <li>🎯 Discover Forward Kinematics (FK) - how robots calculate where their hand will be based on joint angles</li>
+                        <li>⚡ Understand why Forward Kinematics is important for robot accuracy and safety</li>
+                    </ul>
+
+                    <h2>Key Concepts</h2>
+                    <div class="concept-cards">
+                        <div class="concept-card">
+                            <h3>Manipulator (Robot Arm)</h3>
+                            <p>A robot arm is called a manipulator, made of solid parts called links (like bones) and moving parts called joints (where movement happens).</p>
+                        </div>
+                        <div class="concept-card">
+                            <h3>Joints & Links</h3>
+                            <p>Joints are the only parts that actually move and make the robot arm rotate or bend. Links give the arm its fixed length, just like bones in our body.</p>
+                        </div>
+                        <div class="concept-card">
+                            <h3>Base & Gripper</h3>
+                            <p>The base keeps everything stable (like the shoulder). The gripper is the robot's "hand" used to hold and move objects.</p>
+                        </div>
+                        <div class="concept-card">
+                            <h3>Forward Kinematics (FK)</h3>
+                            <p>Forward Kinematics predicts where the robot's hand will be when we set the joint angles. It uses equations to calculate the exact position (x, y coordinates).</p>
+                        </div>
+                    </div>
+
+                    <h2>Why Forward Kinematics Matters</h2>
+                    <ul>
+                        <li>✓ Helps the robot know exactly where its hand is at all times</li>
+                        <li>✓ Helps the robot avoid crashing into objects around them</li>
+                        <li>✓ Allows the robot to place items accurately in the correct location</li>
+                        <li>✓ Enables robots to plan safe and efficient paths</li>
+                    </ul>
+
+                    <h2>Activities Shown in This Video</h2>
+                    <ul>
+                        <li>RobotDK simulation demonstrating joint rotation and arm movement</li>
+                        <li>Comparison between human arm anatomy and robot arm structure</li>
+                        <li>Interactive quiz: "Which part of a robot arm creates motion?" (Answer: Joints)</li>
+                        <li>Challenge: "If the second joint bends more upward, where does the gripper move?" (Answer: Up)</li>
+                        <li>2D robot arm diagram showing angles and gripper position</li>
+                    </ul>
+
+                    <div class="navigation-links">
+                        <a href="index.html" class="btn btn-secondary">← Back to Home</a>
+                        <a href="video2.html" class="btn btn-primary">Next: High School Level →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 RobotRider Group. Educational Project on Forward Kinematics.</p>
+        </div>
+    </footer>
+</body>
+</html>
+
