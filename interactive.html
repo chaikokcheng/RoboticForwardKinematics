@@ -19,6 +19,7 @@
                 <li><a href="video2.html">High School</a></li>
                 <li><a href="video3.html">Undergraduate</a></li>
                 <li><a href="interactive.html" class="active">Interactive Demo</a></li>
+                <li><a href="escape-room.html">Game</a></li>
                 <li><a href="reflection.html">Reflection</a></li>
             </ul>
         </div>
@@ -36,8 +37,8 @@
                         <div class="canvas-overlay">
                             <div class="info-panel">
                                 <h3>End-Effector Position</h3>
-                                <p>X: <span id="endX">0.00</span></p>
-                                <p>Y: <span id="endY">0.00</span></p>
+                                <p>X: <span id="endX">0.00</span> cm</p>
+                                <p>Y: <span id="endY">0.00</span> cm</p>
                             </div>
                         </div>
                     </div>
@@ -52,8 +53,8 @@
                         </div>
 
                         <div class="control-group">
-                            <label for="link1">Link 1 Length: <span id="link1Value">150</span> px</label>
-                            <input type="range" id="link1" min="50" max="250" value="150" step="5">
+                            <label for="link1">Link 1 Length: <span id="link1Value">100</span> cm</label>
+                            <input type="range" id="link1" min="30" max="200" value="100" step="10">
                         </div>
 
                         <div class="control-group">
@@ -62,8 +63,8 @@
                         </div>
 
                         <div class="control-group">
-                            <label for="link2">Link 2 Length: <span id="link2Value">120</span> px</label>
-                            <input type="range" id="link2" min="50" max="200" value="120" step="5">
+                            <label for="link2">Link 2 Length: <span id="link2Value">80</span> cm</label>
+                            <input type="range" id="link2" min="30" max="150" value="80" step="10">
                         </div>
 
                         <div class="control-buttons">
@@ -84,12 +85,12 @@
 
                     <h3>📐 FK Verification Example</h3>
                     <div class="verification-box">
-                        <p><strong>Given:</strong> L₁ = 150px, L₂ = 120px, θ₁ = 45°, θ₂ = 30°</p>
+                        <p><strong>Given:</strong> L₁ = 100cm, L₂ = 80cm, θ₁ = 45°, θ₂ = 30°</p>
                         <p><strong>Step 1:</strong> Convert to radians: θ₁ = 0.785 rad, θ₂ = 0.524 rad</p>
                         <p><strong>Step 2:</strong> Calculate x:</p>
-                        <p>x = 150×cos(45°) + 120×cos(45°+30°) = 150×0.707 + 120×0.259 = 106.07 + 31.06 = <strong>137.13 px</strong></p>
+                        <p>x = 100×cos(45°) + 80×cos(45°+30°) = 100×0.707 + 80×0.259 = 70.71 + 20.71 = <strong>91.42 cm</strong></p>
                         <p><strong>Step 3:</strong> Calculate y:</p>
-                        <p>y = 150×sin(45°) + 120×sin(45°+30°) = 150×0.707 + 120×0.966 = 106.07 + 115.91 = <strong>221.98 px</strong></p>
+                        <p>y = 100×sin(45°) + 80×sin(45°+30°) = 100×0.707 + 80×0.966 = 70.71 + 77.27 = <strong>147.98 cm</strong></p>
                         <p class="verify-note">✅ Set θ₁=45°, θ₂=30° in the simulator to verify!</p>
                     </div>
 

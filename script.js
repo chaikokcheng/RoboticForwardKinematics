@@ -1,5 +1,5 @@
 // Forward Kinematics Simulator
-// 2-link planar robot arm visualization
+// 2-link planar robot arm visualization (using centimeters)
 
 const canvas = document.getElementById('robotCanvas');
 const ctx = canvas.getContext('2d');
@@ -20,11 +20,14 @@ const link2Value = document.getElementById('link2Value');
 const endX = document.getElementById('endX');
 const endY = document.getElementById('endY');
 
-// Robot parameters
+// Robot parameters (in centimeters)
 let theta1 = 0; // Joint 1 angle in degrees
 let theta2 = 0; // Joint 2 angle in degrees
-let link1Length = 150; // Link 1 length in pixels
-let link2Length = 120; // Link 2 length in pixels
+let link1Length = 100; // Link 1 length in cm (1m = 100cm)
+let link2Length = 80;  // Link 2 length in cm (0.8m = 80cm)
+
+// Scale factor: pixels per cm
+const SCALE = 1.5; // 1 cm = 1.5 pixels on canvas
 
 // Animation state
 let isAnimating = false;
@@ -72,17 +75,17 @@ function init() {
 function updateDisplay() {
     theta1Value.textContent = Math.round(theta1);
     theta2Value.textContent = Math.round(theta2);
-    link1Value.textContent = link1Length;
-    link2Value.textContent = link2Length;
+    link1Value.textContent = Math.round(link1Length);
+    link2Value.textContent = Math.round(link2Length);
     
-    // Calculate end-effector position (Forward Kinematics)
+    // Calculate end-effector position (Forward Kinematics) in cm
     const theta1Rad = theta1 * Math.PI / 180;
     const theta2Rad = theta2 * Math.PI / 180;
     
-    // X position = L1*cos(θ1) + L2*cos(θ1+θ2)
+    // X position = L1*cos(θ1) + L2*cos(θ1+θ2) in cm
     const x = link1Length * Math.cos(theta1Rad) + link2Length * Math.cos(theta1Rad + theta2Rad);
     
-    // Y position = L1*sin(θ1) + L2*sin(θ1+θ2)
+    // Y position = L1*sin(θ1) + L2*sin(θ1+θ2) in cm
     const y = link1Length * Math.sin(theta1Rad) + link2Length * Math.sin(theta1Rad + theta2Rad);
     
     endX.textContent = x.toFixed(2);
@@ -104,12 +107,15 @@ function drawRobot() {
     const theta1Rad = theta1 * Math.PI / 180;
     const theta2Rad = theta2 * Math.PI / 180;
     
-    // Calculate joint positions using Forward Kinematics
-    const joint1X = baseX + link1Length * Math.cos(theta1Rad);
-    const joint1Y = baseY - link1Length * Math.sin(theta1Rad); // Invert Y for screen coordinates
+    // Calculate joint positions using Forward Kinematics (convert cm to pixels)
+    const link1Pixels = link1Length * SCALE;
+    const link2Pixels = link2Length * SCALE;
     
-    const endX_pos = baseX + link1Length * Math.cos(theta1Rad) + link2Length * Math.cos(theta1Rad + theta2Rad);
-    const endY_pos = baseY - link1Length * Math.sin(theta1Rad) - link2Length * Math.sin(theta1Rad + theta2Rad);
+    const joint1X = baseX + link1Pixels * Math.cos(theta1Rad);
+    const joint1Y = baseY - link1Pixels * Math.sin(theta1Rad); // Invert Y for screen coordinates
+    
+    const endX_pos = baseX + link1Pixels * Math.cos(theta1Rad) + link2Pixels * Math.cos(theta1Rad + theta2Rad);
+    const endY_pos = baseY - link1Pixels * Math.sin(theta1Rad) - link2Pixels * Math.sin(theta1Rad + theta2Rad);
     
     // Draw base
     ctx.fillStyle = '#333';
@@ -174,8 +180,8 @@ function drawRobot() {
 
 // Draw workspace (reachable area)
 function drawWorkspace() {
-    const maxReach = link1Length + link2Length;
-    const minReach = Math.abs(link1Length - link2Length);
+    const maxReach = (link1Length + link2Length) * SCALE;
+    const minReach = Math.abs(link1Length - link2Length) * SCALE;
     
     // Draw max reach circle
     ctx.strokeStyle = 'rgba(220, 20, 60, 0.2)';
@@ -243,12 +249,12 @@ function drawAxes() {
     ctx.fillText('-Y', baseX + 5, canvas.height - 5);
 }
 
-// Reset robot to default position
+// Reset robot to default position (Link 1 = 100cm, Link 2 = 80cm)
 function resetRobot() {
     theta1 = 0;
     theta2 = 0;
-    link1Length = 150;
-    link2Length = 120;
+    link1Length = 100;
+    link2Length = 80;
     
     theta1Slider.value = theta1;
     theta2Slider.value = theta2;

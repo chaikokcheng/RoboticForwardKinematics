@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🔐 Robot Lab Escape - Forward Kinematics Challenge</title>
+    <meta
+      name="description"
+      content="Interactive escape room challenge teaching Forward Kinematics for 2D SCARA robot arms"
+    />
+    <link rel="stylesheet" href="escape-room.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Background Effects -->
+    <div class="grid-bg"></div>
+    <div class="scanlines"></div>
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-text">
+        <span id="progressText">SYSTEM LOCKED</span>
+      </div>
+    </div>
+
+    <!-- Intro Screen -->
+    <div class="screen active" id="introScreen">
+      <div class="glitch-container">
+        <h1 class="glitch" data-text="ROBOT LAB ESCAPE">ROBOT LAB ESCAPE</h1>
+      </div>
+      <div class="intro-content">
+        <div class="terminal-box">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">SYSTEM ALERT</span>
+          </div>
+          <div class="terminal-body">
+            <p class="typing-text" id="storyText"></p>
+          </div>
+        </div>
+        <div class="robot-specs">
+          <h3>🤖 SCARA ARM SPECIFICATIONS</h3>
+          <div class="spec-grid">
+            <div class="spec-item">
+              <span class="spec-label">Link 1 (a₁)</span>
+              <span class="spec-value">1.0 m</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Link 2 (a₂)</span>
+              <span class="spec-value">0.8 m</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Max Reach</span>
+              <span class="spec-value">1.8 m</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Min Reach</span>
+              <span class="spec-value">0.2 m</span>
+            </div>
+          </div>
+        </div>
+        <button class="neon-btn pulse" id="startBtn" style="display: none">
+          <span>⚡ INITIATE ESCAPE SEQUENCE ⚡</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Room 1: Forward Kinematics - Question 1 -->
+    <div class="screen" id="room1">
+      <div class="room-header">
+        <div class="room-badge">CHALLENGE 1 / 3</div>
+        <h2 class="room-title">🔧 FORWARD KINEMATICS DECODER</h2>
+        <p class="room-subtitle">Calculate where the end-effector will be!</p>
+      </div>
+
+      <div class="room-content">
+        <div class="challenge-card animate-card">
+          <div class="robot-display">
+            <canvas id="room1Canvas" width="400" height="400"></canvas>
+            <div class="canvas-overlay">
+              <span class="question-mark">?</span>
+            </div>
+          </div>
+
+          <div class="given-values">
+            <h4>📐 GIVEN VALUES</h4>
+            <div class="value-box pulse-glow">
+              <span class="var">θ₁ =</span>
+              <span class="val" id="givenTheta1">45°</span>
+            </div>
+            <div class="value-box pulse-glow">
+              <span class="var">θ₂ =</span>
+              <span class="val" id="givenTheta2">30°</span>
+            </div>
+          </div>
+
+          <div class="formula-hint">
+            <h4>💡 FORMULAS</h4>
+            <code>x = a₁·cos(θ₁) + a₂·cos(θ₁ + θ₂)</code>
+            <code>y = a₁·sin(θ₁) + a₂·sin(θ₁ + θ₂)</code>
+          </div>
+
+          <div class="answer-section">
+            <h4>🎯 YOUR PREDICTION</h4>
+            <div class="input-group">
+              <div class="input-field">
+                <label>X coordinate (cm)</label>
+                <input
+                  type="number"
+                  id="room1AnswerX"
+                  step="0.01"
+                  placeholder="?.??"
+                />
+              </div>
+              <div class="input-field">
+                <label>Y coordinate (cm)</label>
+                <input
+                  type="number"
+                  id="room1AnswerY"
+                  step="0.01"
+                  placeholder="?.??"
+                />
+              </div>
+            </div>
+            <button class="neon-btn green" id="room1Submit">
+              <span>🔓 VERIFY ACCESS CODE</span>
+            </button>
+            <div class="feedback" id="room1Feedback"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Room 2: Forward Kinematics - Question 2 -->
+    <div class="screen" id="room2">
+      <div class="room-header">
+        <div class="room-badge">CHALLENGE 2 / 3</div>
+        <h2 class="room-title">🔩 JOINT ANGLE ANALYSIS</h2>
+        <p class="room-subtitle">More complex angles await!</p>
+      </div>
+
+      <div class="room-content">
+        <div class="challenge-card animate-card">
+          <div class="robot-display">
+            <canvas id="room2Canvas" width="400" height="400"></canvas>
+            <div class="canvas-overlay-2">
+              <span class="question-mark bounce">?</span>
+            </div>
+          </div>
+
+          <div class="given-values">
+            <h4>📐 GIVEN VALUES</h4>
+            <div class="value-box pulse-glow-cyan">
+              <span class="var">θ₁ =</span>
+              <span class="val" id="givenTheta1_2">-30°</span>
+            </div>
+            <div class="value-box pulse-glow-cyan">
+              <span class="var">θ₂ =</span>
+              <span class="val" id="givenTheta2_2">60°</span>
+            </div>
+          </div>
+
+          <div class="formula-hint">
+            <h4>💡 FORMULAS</h4>
+            <code>x = a₁·cos(θ₁) + a₂·cos(θ₁ + θ₂)</code>
+            <code>y = a₁·sin(θ₁) + a₂·sin(θ₁ + θ₂)</code>
+          </div>
+
+          <div class="answer-section">
+            <h4>🎯 YOUR CALCULATION</h4>
+            <div class="input-group">
+              <div class="input-field">
+                <label>X coordinate (cm)</label>
+                <input
+                  type="number"
+                  id="room2AnswerX"
+                  step="0.01"
+                  placeholder="?.??"
+                />
+              </div>
+              <div class="input-field">
+                <label>Y coordinate (cm)</label>
+                <input
+                  type="number"
+                  id="room2AnswerY"
+                  step="0.01"
+                  placeholder="?.??"
+                />
+              </div>
+            </div>
+            <button class="neon-btn cyan" id="room2Submit">
+              <span>🔐 DECODE POSITION</span>
+            </button>
+            <div class="feedback" id="room2Feedback"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Room 3: Forward Kinematics - Question 3 -->
+    <div class="screen" id="room3">
+      <div class="room-header">
+        <div class="room-badge final-badge">FINAL CHALLENGE 3 / 3</div>
+        <h2 class="room-title rainbow-text">🚀 ESCAPE SEQUENCE FINAL</h2>
+        <p class="room-subtitle">Solve this to unlock the exit!</p>
+      </div>
+
+      <div class="room-content">
+        <div class="challenge-card animate-card final-card">
+          <div class="robot-display">
+            <canvas id="room3Canvas" width="400" height="400"></canvas>
+            <div class="canvas-overlay-3">
+              <span class="question-mark spin">?</span>
+            </div>
+          </div>
+
+          <div class="given-values">
+            <h4>📐 GIVEN VALUES</h4>
+            <div class="value-box pulse-glow-pink">
+              <span class="var">θ₁ =</span>
+              <span class="val" id="givenTheta1_3">90°</span>
+            </div>
+            <div class="value-box pulse-glow-pink">
+              <span class="var">θ₂ =</span>
+              <span class="val" id="givenTheta2_3">-45°</span>
+            </div>
+          </div>
+
+          <div class="formula-hint">
+            <h4>💡 FORMULAS</h4>
+            <code>x = a₁·cos(θ₁) + a₂·cos(θ₁ + θ₂)</code>
+            <code>y = a₁·sin(θ₁) + a₂·sin(θ₁ + θ₂)</code>
+          </div>
+
+          <div class="answer-section">
+            <h4>🎯 FINAL ANSWER</h4>
+            <div class="input-group">
+              <div class="input-field">
+                <label>X coordinate (cm)</label>
+                <input
+                  type="number"
+                  id="room3AnswerX"
+                  step="0.01"
+                  placeholder="?.??"
+                />
+              </div>
+              <div class="input-field">
+                <label>Y coordinate (cm)</label>
+                <input
+                  type="number"
+                  id="room3AnswerY"
+                  step="0.01"
+                  placeholder="?.??"
+                />
+              </div>
+            </div>
+            <button class="neon-btn rainbow" id="room3Submit">
+              <span>🚀 UNLOCK EXIT</span>
+            </button>
+            <div class="feedback" id="room3Feedback"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Victory Screen -->
+    <div class="screen" id="victoryScreen">
+      <div class="victory-content">
+        <div class="confetti-container" id="confetti"></div>
+        <h1 class="victory-title">🎉 ESCAPED! 🎉</h1>
+        <div class="victory-message">
+          <p>You have successfully mastered Forward Kinematics!</p>
+          <div class="achievements">
+            <div class="achievement pop-in" style="animation-delay: 0.2s">
+              <span class="badge">🔧</span>
+              <span>Question 1: Passed!</span>
+            </div>
+            <div class="achievement pop-in" style="animation-delay: 0.4s">
+              <span class="badge">🔩</span>
+              <span>Question 2: Passed!</span>
+            </div>
+            <div class="achievement pop-in" style="animation-delay: 0.6s">
+              <span class="badge">🚀</span>
+              <span>Question 3: Passed!</span>
+            </div>
+          </div>
+        </div>
+        <div class="final-stats">
+          <h3>📊 YOUR PERFORMANCE</h3>
+          <div class="stat-grid">
+            <div class="stat">
+              <span class="stat-value" id="finalTime">--</span>
+              <span class="stat-label">Total Time</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value" id="finalAttempts">--</span>
+              <span class="stat-label">Total Attempts</span>
+            </div>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="neon-btn green" id="restartBtn">
+            <span>🔄 PLAY AGAIN</span>
+          </button>
+          <a href="index.html" class="neon-btn cyan" id="homeBtn">
+            <span>🏠 BACK TO HOME</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script src="escape-room.js"></script>
+  </body>
+</html>
