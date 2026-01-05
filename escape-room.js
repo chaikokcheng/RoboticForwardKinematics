@@ -238,8 +238,71 @@ function drawRobotArm(canvas, theta1Deg, theta2Deg, options = {}) {
         if (options.showCoords) {
             ctx.font = '12px Space Mono';
             ctx.fillStyle = '#00ff88';
-            const coordText = `(${joints.endEffector.x.toFixed(2)}, ${joints.endEffector.y.toFixed(2)})`;
+            const coordText = `(${(joints.endEffector.x * 100).toFixed(2)}, ${(joints.endEffector.y * 100).toFixed(2)}) cm`;
             ctx.fillText(coordText, eeX + 15, eeY + 5);
+        }
+    }
+    
+    // Draw user's predicted position (live preview)
+    if (options.userPrediction && !isNaN(options.userPrediction.x) && !isNaN(options.userPrediction.y)) {
+        // Convert user's cm input to meters for display
+        const userX = options.userPrediction.x / 100;
+        const userY = options.userPrediction.y / 100;
+        
+        const predX = centerX + userX * scale;
+        const predY = centerY - userY * scale;
+        
+        // Calculate distance to correct answer
+        const correctX = joints.endEffector.x;
+        const correctY = joints.endEffector.y;
+        const dist = Math.sqrt((userX - correctX) ** 2 + (userY - correctY) ** 2) * 100; // in cm
+        
+        // Choose color based on distance (green when close, yellow medium, red far)
+        let predColor, glowColor;
+        if (dist <= 1) {
+            predColor = '#00ff88'; // Green - correct!
+            glowColor = 'rgba(0, 255, 136, 0.5)';
+        } else if (dist <= 20) {
+            predColor = '#ffff00'; // Yellow - getting close
+            glowColor = 'rgba(255, 255, 0, 0.4)';
+        } else {
+            predColor = '#ff4466'; // Red - far away
+            glowColor = 'rgba(255, 68, 102, 0.4)';
+        }
+        
+        // Draw prediction glow
+        ctx.fillStyle = glowColor;
+        ctx.beginPath();
+        ctx.arc(predX, predY, 20, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Draw prediction crosshair
+        ctx.strokeStyle = predColor;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(predX - 12, predY);
+        ctx.lineTo(predX + 12, predY);
+        ctx.moveTo(predX, predY - 12);
+        ctx.lineTo(predX, predY + 12);
+        ctx.stroke();
+        
+        // Draw prediction circle
+        ctx.beginPath();
+        ctx.arc(predX, predY, 8, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        // Draw "Your Guess" label
+        ctx.font = '11px Space Mono';
+        ctx.fillStyle = predColor;
+        ctx.fillText(`Your Guess`, predX + 15, predY - 5);
+        ctx.fillText(`(${options.userPrediction.x.toFixed(0)}, ${options.userPrediction.y.toFixed(0)}) cm`, predX + 15, predY + 10);
+        
+        // Draw distance indicator
+        ctx.font = 'bold 12px Space Mono';
+        if (dist <= 1) {
+            ctx.fillText(`✓ Within range!`, predX + 15, predY + 25);
+        } else {
+            ctx.fillText(`${dist.toFixed(1)} cm away`, predX + 15, predY + 25);
         }
     }
     
@@ -412,6 +475,34 @@ function initRoom(roomNum) {
     document.getElementById(`room${roomNum}AnswerX`).value = '';
     document.getElementById(`room${roomNum}AnswerY`).value = '';
     document.getElementById(`room${roomNum}Feedback`).className = 'feedback';
+    
+    // Add live preview listeners
+    setupLivePreview(roomNum);
+}
+
+// ==========================================
+// Live Preview as User Types
+// ==========================================
+function setupLivePreview(roomNum) {
+    const inputX = document.getElementById(`room${roomNum}AnswerX`);
+    const inputY = document.getElementById(`room${roomNum}AnswerY`);
+    const canvas = document.getElementById(`room${roomNum}Canvas`);
+    const question = gameState.questions[roomNum - 1];
+    
+    const updatePreview = () => {
+        const userX = parseFloat(inputX.value);
+        const userY = parseFloat(inputY.value);
+        
+        drawRobotArm(canvas, question.theta1, question.theta2, {
+            hideEndEffector: true,
+            showAngles: true,
+            userPrediction: { x: userX, y: userY }
+        });
+    };
+    
+    // Remove old listeners and add new ones
+    inputX.oninput = updatePreview;
+    inputY.oninput = updatePreview;
 }
 
 // ==========================================
@@ -437,10 +528,10 @@ function checkAnswer(roomNum) {
         return;
     }
     
-    // Calculate error in centimeters (tolerance of 15cm)
+    // Calculate error in centimeters (tolerance of 1cm)
     const error = distance(userX, userY, expectedX, expectedY);
     
-    if (error <= 15) {
+    if (error <= 1) {
         // Success!
         feedback.innerHTML = `✅ CORRECT! Access Code Verified!<br>
             Actual position: (${(question.correctX * 100).toFixed(2)} cm, ${(question.correctY * 100).toFixed(2)} cm)`;
